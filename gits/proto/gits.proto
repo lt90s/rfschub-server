@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package gits;
+
+service Gits {
+    // clone a repository
+    rpc Clone (CloneRequest) returns (CloneResponse);
+    // query clone status
+    rpc GetCloneStatus (GetCloneStatusRequest) returns (GetCloneStatusResponse);
+    // get archive
+    rpc Archive(ArchiveRequest) returns (stream ArchiveResponse);
+    // get all branches and tags
+    rpc GetNamedCommits (GetNamedCommitsRequest) returns (GetNamedCommitsResponse);
+    // get all files
+    rpc GetRepositoryFiles (GetRepositoryFilesRequest) returns (GetRepositoryFilesResponse);
+    // get file content
+    rpc GetRepositoryBlob (GetRepositoryBlobRequest) returns (GetRepositoryBlobResponse);
+}
+
+enum ErrorCode {
+    Success = 0;
+    RepoUrlInvalid = 100001;
+    RepoNotExist = 100002;
+    GitsBusy = 100003;
+    RepoCloning = 100004;
+}
+
+enum CloneStatus {
+    Unknown = 0;
+    Cloning = 1;
+    Cloned = 2;
+}
+
+message CloneRequest {
+    string url = 1;
+}
+
+message CloneResponse {
+}
+
+message GetCloneStatusRequest {
+    string url = 1;
+}
+
+message GetCloneStatusResponse {
+    CloneStatus status = 1;
+    string progress = 2;
+}
+
+message ArchiveRequest {
+    string url = 1;
+    string commit = 2;
+}
+
+message ArchiveResponse {
+    bytes data = 1;
+}
+
+message GetNamedCommitsRequest {
+    string url = 1;
+}
+
+message GetNamedCommitsResponse {
+    repeated NamedCommit commits = 1;
+}
+
+message GetRepositoryFilesRequest {
+    string url = 1;
+    string commit = 2;
+}
+
+message GetRepositoryFilesResponse {
+    repeated FileEntry entries = 1;
+
+}
+
+message GetRepositoryBlobRequest {
+    string url = 1;
+    string commit = 2;
+    string file = 3;
+}
+
+message GetRepositoryBlobResponse {
+    string content = 1;
+    bool plain = 2;
+}
+
+message NamedCommit {
+    string name = 1;
+    string hash = 2;
+    bool branch = 3;
+}
+
+message FileEntry {
+    string file = 1;
+    bool dir = 2;
+}

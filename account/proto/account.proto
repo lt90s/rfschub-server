@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package account;
+
+service AccountService {
+    rpc Register(RegisterRequest) returns (RegisterResponse);
+    rpc Login(LoginRequest) returns (LoginResponse);
+    rpc AccountId(AccountIdRequest) returns (AccountIdResponse);
+    rpc AccountInfoByName(AccountName) returns (AccountInfo);
+    rpc AccountsBasicInfo(AccountsBasicInfoRequest) returns (AccountsBasicInfoResponse);
+}
+
+enum ErrorCode {
+    Success = 0;
+    ErrorNameUsed = 300001;
+    ErrorEmailRegistered = 300002;
+    ErrorNamePasswordMisMatch = 300003;
+    ErrorNotActivated = 30004;
+}
+
+message RegisterRequest {
+    string name = 1;
+    string email = 2;
+    string password = 3;
+}
+
+message RegisterResponse {
+}
+
+message LoginRequest {
+    string name = 1;
+    string email = 2;
+    string password = 3;
+}
+
+message LoginResponse {
+    string token = 3;
+    AccountInfo info =4;
+}
+
+message AccountInfo {
+    string id = 1;
+    string name = 2;
+    string avatar = 3;
+    int64 created_at = 4;
+}
+
+message AccountIdRequest {
+    string username = 1;
+}
+
+message AccountName {
+    string name =1;
+}
+
+message AccountIdResponse {
+    string uid = 1;
+}
+
+message AccountsBasicInfoRequest {
+    repeated string uids = 1;
+}
+
+message AccountsBasicInfoResponse {
+    repeated BasicInfo infos = 1;
+}
+
+message BasicInfo {
+    string id = 1;
+    string name = 2;
+    string avatar = 3;
+}

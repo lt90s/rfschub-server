@@ -1,0 +1,3 @@
+service:
+  name: GitService
+  id: GitService_1

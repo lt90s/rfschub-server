@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+
+package index;
+
+service Index {
+    rpc IndexRepository(IndexRepositoryRequest) returns (IndexRepositoryResponse);
+    rpc IndexStatus(IndexStatusRequest) returns (IndexStatusResponse);
+    rpc SearchSymbol(SearchSymbolRequest) returns (SearchSymbolResponse);
+}
+
+enum ErrorCode {
+    Success = 0;
+    InternalError = 500;
+    IndexerBusy = 500001;
+    Indexing = 500002;
+}
+
+enum StatusCode {
+    StatusUnIndexed = 0;
+    StatusIndexing = 2;
+    StatusIndexed = 3;
+}
+
+message IndexRepositoryRequest {
+    string url = 1;
+    string hash = 2;
+}
+
+message IndexRepositoryResponse {
+    bool indexed = 1;
+}
+
+message IndexStatusRequest {
+    string url = 1;
+    string hash = 2;
+}
+
+message IndexStatusResponse {
+    StatusCode status = 3;
+}
+
+
+message SearchSymbolRequest {
+    string url = 1;
+    string hash = 2;
+    string symbol = 3;
+}
+
+message SearchSymbolResponse {
+    repeated SymbolResult symbols = 1;
+}
+
+message SymbolResult {
+    string file = 1;
+    int32 lineNumber = 2;
+    string line = 3;
+    string lineBefore = 4;
+    string lineAfter = 5;
+    string kind = 6;
+}

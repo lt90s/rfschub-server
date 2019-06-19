@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package syntect;
+
+service SyntectService {
+    rpc RenderCode(RenderCodeRequest) returns (RenderCodeResponse);
+}
+
+enum CodeTheme {
+    SolarizedDark = 0;
+    SolarizedLight = 1;
+}
+
+message RenderCodeRequest {
+    string file = 1;
+    string code = 2;
+    CodeTheme theme = 3;
+}
+
+message RenderCodeResponse {
+    string renderedCode = 1;
+}

@@ -1,0 +1,7 @@
+account: ./build/account
+api: ./build/api
+gits: ./build/gits
+index: ./build/index
+project: ./build/project
+repository: ./build/repository
+syntect: ./build/syntect

@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package repository;
+
+service RepositoryService {
+    rpc IsRepositoryExist(RepositoryExistRequest) returns (RepositoryExistResponse);
+    rpc NamedCommits(NamedCommitsRequest) returns (NamedCommitsResponse);
+    rpc Directory(DirectoryRequest) returns (DirectoryResponse);
+    rpc Blob(BlobRequest) returns (BlobResponse);
+}
+
+enum RepositoryErrorCode {
+    Success = 0;
+    InSync = 200001;
+    RepositoryNotFound = 200002;
+    DirectoryNotFound = 200003;
+}
+
+message NamedCommitsRequest {
+    string url = 1;
+}
+
+message NamedCommitsResponse {
+    repeated NamedCommit commits = 3;
+}
+
+message NamedCommit {
+    string name = 1;
+    string hash = 2;
+    bool branch = 3;
+}
+
+message RepositoryExistRequest {
+    string url = 1;
+    string hash = 2;
+    string name = 3;
+}
+
+message RepositoryExistResponse {
+    bool exist = 1;
+}
+
+message DirectoryRequest {
+    string url = 1;
+    string hash = 2;
+    string path = 3;
+}
+
+message DirectoryResponse {
+    repeated DirectoryEntry entries = 3;
+}
+
+message DirectoryEntry {
+    string file = 1;
+    bool dir = 2;
+}
+
+message BlobRequest {
+    string url = 1;
+    string hash = 2;
+    string path = 3;
+}
+
+message BlobResponse {
+    string content = 3;
+    bool plain = 4;
+}
+
+
+

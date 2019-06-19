@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package project;
+
+service Project {
+    rpc NewProject(NewProjectRequest) returns (NewProjectResponse);
+    rpc ProjectInfo(ProjectInfoRequest) returns (ProjectInfoResponse);
+    rpc ListProjects(ListProjectsRequest) returns (ListProjectsResponse);
+    rpc AddAnnotation(AddAnnotationRequest) returns (AddAnnotationResponse);
+    rpc GetAnnotationLines(GetAnnotationLinesRequest) returns (GetAnnotationLinesResponse);
+    rpc GetAnnotations(GetAnnotationsRequest) returns (GetAnnotationsResponse);
+    rpc GetLatestAnnotations(GetLatestAnnotationsRequest) returns (GetLatestAnnotationsResponse);
+}
+
+enum ErrorCode {
+    Success = 0;
+    RepositoryNotExist = 400001;
+    ProjectExist = 400002;
+    IndexProjectFailure = 400003;
+}
+
+message NewProjectRequest {
+    string uid = 1;
+    string url = 2;
+    string hash = 3;
+    string name = 4;
+    bool branch = 5;
+}
+
+message NewProjectResponse {
+    string id = 3;
+}
+
+message ProjectInfoRequest {
+    string uid = 1;
+    string ownerUid = 2;
+    string url = 3;
+    string name = 4;
+}
+
+message ProjectInfoResponse {
+    string id = 1;
+    string hash = 2;
+    bool branch = 3;
+    bool canAnnotate = 4;
+    bool indexed = 5;
+}
+
+message AddAnnotationRequest {
+    string pid = 1;
+    string uid = 2;
+    string url = 3;
+    string file = 4;
+    int32 lineNumber = 5;
+    string annotation = 6;
+}
+
+message AddAnnotationResponse {
+}
+
+
+message GetAnnotationLinesRequest {
+    string pid = 1;
+    string file = 2;
+}
+
+message GetAnnotationLinesResponse {
+    repeated int32 lines = 1;
+}
+
+message GetAnnotationsRequest {
+    string pid = 1;
+    string file = 2;
+    int32 lineNumber = 3;
+}
+
+message GetAnnotationsResponse {
+    repeated AnnotationRecord records = 1;
+}
+
+message AnnotationRecord {
+    string uid = 1;
+    string name = 2;
+    string annotation = 3;
+    int64 createdAt = 4;
+}
+
+message GetLatestAnnotationsRequest {
+    string pid = 1;
+    string parent = 2;
+}
+
+message GetLatestAnnotationsResponse {
+    repeated LatestAnnotation annotations = 1;
+}
+
+message LatestAnnotation {
+    string file = 1;
+    int32 lineNumber = 2;
+    string brief = 3;
+    int64 timestamp = 4;
+    string sub = 5;
+}
+
+message ListProjectsRequest {
+    string uid = 1;
+}
+
+message ListProjectsResponse {
+    repeated ProjectInfo projects = 1;
+}
+
+message ProjectInfo {
+    string url = 1;
+    string name = 2;
+    string hash = 3;
+    bool branch = 4;
+    int64 createdAt = 5;
+}
